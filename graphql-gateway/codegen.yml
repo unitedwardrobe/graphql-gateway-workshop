@@ -1,0 +1,25 @@
+overwrite: true
+documents: {}
+require:
+  - "ts-node/register/transpile-only"
+generates:
+  ./src/resolver-types.ts:
+    schema: ./src/**/*.graphql
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - "typescript"
+      - "typescript-resolvers"
+    config:
+      makeResolverTypeCallable: true
+      mapperTypeSuffix: Model
+      contextType: ./types#AppContext
+      noSchemaStitching: true
+      namingConvention:
+        enumValues: upper-case#upperCase
+      mappers:
+        Product: ./services/product/models#Product
+        ProductsConnection: ./services/product/models#ProductsConnection

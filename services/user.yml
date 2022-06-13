@@ -1,0 +1,43 @@
+openapi: 3.0.0
+info:
+  title: User API
+  version: 1.0.0
+servers:
+  - url: http://localhost:4001/user-service
+paths:
+  /batch:
+    get:
+      summary: Returns a batch of users.
+      parameters:
+        - name: user_ids
+          in: query
+          required: true
+          description: The user ID.
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+      responses:
+        "200":
+          description: User found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        product_ids:
+          type: array
+          items:
+            type: integer

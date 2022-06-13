@@ -1,0 +1,123 @@
+openapi: 3.0.0
+info:
+  title: Product API
+  version: 1.0.0
+servers:
+  - url: http://localhost:4001/product-service
+paths:
+  /products:
+    get:
+      summary: Returns products.
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: The amount of products requested.
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+        - name: offset
+          in: query
+          required: true
+          description: The offset of the requested products.
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+      responses:
+        "200":
+          description: Product found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_count:
+                    type: integer
+                  products:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found.
+  /batch:
+    get:
+      summary: Returns a batch of products.
+      parameters:
+        - name: product_ids
+          in: query
+          required: true
+          description: The product IDs.
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+      responses:
+        "200":
+          description: Product found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+  /favorite:
+    post:
+      summary: Favorite a product.
+      requestBody:
+        description: The product ID.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: number
+      responses:
+        "200":
+          description: Product favorited.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found.
+  /unfavorite:
+    post:
+      summary: Unfavorite a product.
+      requestBody:
+        description: The product ID.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: number
+      responses:
+        "200":
+          description: Product unfavorited.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found.
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        seller_id:
+          type: integer
+        favorites:
+          type: number
