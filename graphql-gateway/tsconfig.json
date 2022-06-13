@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "target": "es2017"
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

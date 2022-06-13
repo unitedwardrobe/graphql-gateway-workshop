@@ -1,0 +1,15 @@
+type Query {
+  product(id: ID!): Product
+  productsConnection(first: Int!, after: String): ProductsConnection!
+}
+
+type Product {
+  id: ID!
+  title: String!
+}
+
+type ProductsConnection {
+  nodes: [Product!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
