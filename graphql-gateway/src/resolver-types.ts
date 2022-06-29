@@ -47,6 +47,7 @@ export type PageInfo = {
 export type Product = {
   __typename?: "Product";
   id: Scalars["ID"]["output"];
+  seller: User;
   title: Scalars["String"]["output"];
 };
 
@@ -81,6 +82,7 @@ export type User = {
   __typename?: "User";
   id: Scalars["ID"]["output"];
   name: Scalars["String"]["output"];
+  products: Array<Product>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -232,6 +234,7 @@ export type ProductResolvers<
   ParentType extends ResolversParentTypes["Product"] = ResolversParentTypes["Product"]
 > = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  seller?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -276,6 +279,11 @@ export type UserResolvers<
 > = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  products?: Resolver<
+    Array<ResolversTypes["Product"]>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

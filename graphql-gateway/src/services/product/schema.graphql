@@ -6,6 +6,7 @@ type Query {
 type Product {
   id: ID!
   title: String!
+  seller: User!
 }
 
 type ProductsConnection {

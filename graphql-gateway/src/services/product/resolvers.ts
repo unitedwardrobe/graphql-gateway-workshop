@@ -23,6 +23,8 @@ const resolvers: Resolvers = {
   Product: {
     id: (parent) => String(parent.id),
     title: (parent) => parent.title,
+    seller: (parent, {}, context) =>
+      context.dataloaders.users.load(parent.seller_id),
   },
   ProductsConnection: limitOffsetConnectionResolvers(),
 };
