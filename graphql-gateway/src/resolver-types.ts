@@ -5,6 +5,10 @@ import {
   ProductsConnection as ProductsConnectionModel,
 } from "./services/product/models";
 import { User as UserModel } from "./services/user/models";
+import {
+  SearchConnection as SearchConnectionModel,
+  SearchResultParent as SearchResultParentModel,
+} from "./services/search/models";
 import { AppContext } from "./types";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -89,6 +93,7 @@ export type Query = {
   __typename?: "Query";
   product?: Maybe<Product>;
   productsConnection: ProductsConnection;
+  search: SearchResultsConnection;
   user?: Maybe<User>;
 };
 
@@ -101,8 +106,23 @@ export type QueryProductsConnectionArgs = {
   first: Scalars["Int"]["input"];
 };
 
+export type QuerySearchArgs = {
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  first: Scalars["Int"]["input"];
+  query: Scalars["String"]["input"];
+};
+
 export type QueryUserArgs = {
   id: Scalars["ID"]["input"];
+};
+
+export type SearchResult = Product | User;
+
+export type SearchResultsConnection = {
+  __typename?: "SearchResultsConnection";
+  nodes: Array<SearchResult>;
+  pageInfo: PageInfo;
+  totalCount: Scalars["Int"]["output"];
 };
 
 export type UnfavoriteProductInput = {
@@ -244,6 +264,8 @@ export type ResolversTypes = {
   Product: ResolverTypeWrapper<ProductModel>;
   ProductsConnection: ResolverTypeWrapper<ProductsConnectionModel>;
   Query: ResolverTypeWrapper<{}>;
+  SearchResult: ResolverTypeWrapper<SearchResultParentModel>;
+  SearchResultsConnection: ResolverTypeWrapper<SearchConnectionModel>;
   String: ResolverTypeWrapper<Scalars["String"]["output"]>;
   UnfavoriteProductInput: UnfavoriteProductInput;
   UnfavoriteProductPayload: ResolverTypeWrapper<
@@ -268,6 +290,8 @@ export type ResolversParentTypes = {
   Product: ProductModel;
   ProductsConnection: ProductsConnectionModel;
   Query: {};
+  SearchResult: SearchResultParentModel;
+  SearchResultsConnection: SearchConnectionModel;
   String: Scalars["String"]["output"];
   UnfavoriteProductInput: UnfavoriteProductInput;
   UnfavoriteProductPayload: Omit<UnfavoriteProductPayload, "product"> & {
@@ -357,12 +381,39 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryProductsConnectionArgs, "first">
   >;
+  search?: Resolver<
+    ResolversTypes["SearchResultsConnection"],
+    ParentType,
+    ContextType,
+    RequireFields<QuerySearchArgs, "first" | "query">
+  >;
   user?: Resolver<
     Maybe<ResolversTypes["User"]>,
     ParentType,
     ContextType,
     RequireFields<QueryUserArgs, "id">
   >;
+};
+
+export type SearchResultResolvers<
+  ContextType = AppContext,
+  ParentType extends ResolversParentTypes["SearchResult"] = ResolversParentTypes["SearchResult"]
+> = {
+  __resolveType: TypeResolveFn<"Product" | "User", ParentType, ContextType>;
+};
+
+export type SearchResultsConnectionResolvers<
+  ContextType = AppContext,
+  ParentType extends ResolversParentTypes["SearchResultsConnection"] = ResolversParentTypes["SearchResultsConnection"]
+> = {
+  nodes?: Resolver<
+    Array<ResolversTypes["SearchResult"]>,
+    ParentType,
+    ContextType
+  >;
+  pageInfo?: Resolver<ResolversTypes["PageInfo"], ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type UnfavoriteProductPayloadResolvers<
@@ -399,6 +450,8 @@ export type Resolvers<ContextType = AppContext> = {
   Product?: ProductResolvers<ContextType>;
   ProductsConnection?: ProductsConnectionResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  SearchResult?: SearchResultResolvers<ContextType>;
+  SearchResultsConnection?: SearchResultsConnectionResolvers<ContextType>;
   UnfavoriteProductPayload?: UnfavoriteProductPayloadResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };

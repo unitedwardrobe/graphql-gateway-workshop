@@ -15,6 +15,9 @@ describe("environment", () => {
         user: {
           endpoint: "http://localhost:4001/user-service",
         },
+        search: {
+          endpoint: "http://localhost:4001/search-service",
+        },
       },
       port: 4000,
     });
@@ -26,6 +29,7 @@ describe("environment", () => {
         PORT: "3000",
         PRODUCT_SERVICE_ENDPOINT: "foo",
         USER_SERVICE_ENDPOINT: "bar",
+        SEARCH_SERVICE_ENDPOINT: "baz",
       };
       isolatedEnvironment = require(".").environment;
     });
@@ -36,6 +40,9 @@ describe("environment", () => {
         },
         user: {
           endpoint: "bar",
+        },
+        search: {
+          endpoint: "baz",
         },
       },
       port: 3000,

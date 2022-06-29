@@ -4,6 +4,8 @@ const productServiceEndpoint =
   "http://localhost:4001/product-service";
 const userServiceEndpoint =
   process.env.USER_SERVICE_ENDPOINT ?? "http://localhost:4001/user-service";
+const searchServiceEndpoint =
+  process.env.SEARCH_SERVICE_ENDPOINT ?? "http://localhost:4001/search-service";
 
 export const environment = {
   services: {
@@ -12,6 +14,9 @@ export const environment = {
     },
     user: {
       endpoint: userServiceEndpoint,
+    },
+    search: {
+      endpoint: searchServiceEndpoint,
     },
   },
   port,

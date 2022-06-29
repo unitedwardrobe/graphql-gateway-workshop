@@ -24,5 +24,7 @@ generates:
         Product: ./services/product/models#Product
         User: ./services/user/models#User
         ProductsConnection: ./services/product/models#ProductsConnection
+        SearchResultsConnection: ./services/search/models#SearchConnection
+        SearchResult: ./services/search/models#SearchResultParent
       scalars:
         ID: string
