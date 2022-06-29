@@ -1,5 +1,5 @@
 import resolvers from "./resolvers";
 
 test("resolvers", () => {
-  expect(resolvers.length).toEqual(1);
+  expect(resolvers.length).toEqual(2);
 });

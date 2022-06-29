@@ -12,6 +12,9 @@ describe("environment", () => {
         product: {
           endpoint: "http://localhost:4001/product-service",
         },
+        user: {
+          endpoint: "http://localhost:4001/user-service",
+        },
       },
       port: 4000,
     });
@@ -22,6 +25,7 @@ describe("environment", () => {
       process.env = {
         PORT: "3000",
         PRODUCT_SERVICE_ENDPOINT: "foo",
+        USER_SERVICE_ENDPOINT: "bar",
       };
       isolatedEnvironment = require(".").environment;
     });
@@ -29,6 +33,9 @@ describe("environment", () => {
       services: {
         product: {
           endpoint: "foo",
+        },
+        user: {
+          endpoint: "bar",
         },
       },
       port: 3000,

@@ -17,6 +17,7 @@ const context = {
   },
   dataloaders: {
     products: new DataLoader(() => null),
+    users: new DataLoader(() => null),
   },
 } as AppContext;
 
@@ -52,7 +53,7 @@ describe("Query", () => {
   });
 });
 describe("Product", () => {
-  const product = { id: 123, title: "the title" } as Product;
+  const product = { id: 123, title: "the title", seller_id: 456 } as Product;
   test("id", () => {
     expect(resolvers.Product.id(product, {}, context, info)).toEqual("123");
   });
@@ -60,5 +61,11 @@ describe("Product", () => {
     expect(resolvers.Product.title(product, {}, context, info)).toEqual(
       "the title"
     );
+  });
+  test("seller", async () => {
+    (context.dataloaders.users.load as jest.Mock).mockResolvedValue("the user");
+    await expect(
+      resolvers.Product.seller(product, {}, context, info)
+    ).resolves.toEqual("the user");
   });
 });
