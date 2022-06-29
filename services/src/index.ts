@@ -159,7 +159,10 @@ app.get("/search-service/search", (req, res) => {
   }
   results.push(...products.slice(minLength), ...users.slice(minLength));
 
-  res.status(200).json(results.slice(offset, offset + limit));
+  res.status(200).json({
+    total_count: results.length,
+    search_results: results.slice(offset, offset + limit),
+  });
 });
 
 app.listen(4001, () => {
