@@ -85,14 +85,14 @@ Add a seller resolver which returns the same user type as the user query. In add
 
 ## 7. Add unit tests for all the new code
 
-Rerun the test suite. Is it failing due to your new changes? Fix all the broken tests. Afterwards write new tests to get the coverage back up at 100% again.
+Rerun the test suite. Is it failing due to your new changes? Fix all the broken tests. Afterwards write new tests to get the coverage back up at 100% again. For each task that follows, please keep the coverage up at 100%.
 
 ## 8. Add favorite mutations
 
 The product service also contains endpoints to favorite and unfavorite products. We can add those endpoints to the GraphQL schema as mutations. We follow quite a specific naming convention for them:
 
 ```graphql
-mutation {
+type Mutation {
   favoriteProduct(input: FavoriteProductInput!): FavoriteProductPayload!
 }
 
@@ -111,7 +111,7 @@ The convention is to have a mutation name, which has an input (`${mutationName}I
 
 The payload also always returns the updated object. That way the client can update the cache for that specific item.
 
-Implement the mutations for favoriting and unfavoriting products.
+Implement the mutations for favoriting and unfavoriting products. Also add a resolver for the favorite count to products.
 
 The favorites in this example API are stored in-memory in the service. Restarting the service will clear the favorites of all products. In addition to that: normally a favorite is bound to a logged in user. For the sake of the excersize we don't have authorisation so (un)favoriting just increases/decreases the favorites counter every time it's called.
 
@@ -121,7 +121,7 @@ The favorites in this example API are stored in-memory in the service. Restartin
 - Add the (un)favorite mutations, inputs and types to `graphql-gateway/services/product/schema.graphql`.
 - Check `services/product.yml` for the product service schema.
 - Use the response of the (un)favorite call to resolve the product in the mutation's payload.
-- Dataloaders store information per request in memory. Ideally you clear (or even update) the existing product in the dataloader.
+- Dataloaders store information per request in memory. Ideally you clear the existing product in the dataloader.
 </details>
 
 ## 9. Create the search endpoint
