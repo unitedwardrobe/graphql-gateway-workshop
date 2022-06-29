@@ -4,6 +4,7 @@ import {
   Product as ProductModel,
   ProductsConnection as ProductsConnectionModel,
 } from "./services/product/models";
+import { User as UserModel } from "./services/user/models";
 import { AppContext } from "./types";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -60,6 +61,7 @@ export type Query = {
   __typename?: "Query";
   product?: Maybe<Product>;
   productsConnection: ProductsConnection;
+  user?: Maybe<User>;
 };
 
 export type QueryProductArgs = {
@@ -69,6 +71,16 @@ export type QueryProductArgs = {
 export type QueryProductsConnectionArgs = {
   after?: InputMaybe<Scalars["String"]["input"]>;
   first: Scalars["Int"]["input"];
+};
+
+export type QueryUserArgs = {
+  id: Scalars["ID"]["input"];
+};
+
+export type User = {
+  __typename?: "User";
+  id: Scalars["ID"]["output"];
+  name: Scalars["String"]["output"];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -186,6 +198,7 @@ export type ResolversTypes = {
   ProductsConnection: ResolverTypeWrapper<ProductsConnectionModel>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars["String"]["output"]>;
+  User: ResolverTypeWrapper<UserModel>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -198,6 +211,7 @@ export type ResolversParentTypes = {
   ProductsConnection: ProductsConnectionModel;
   Query: {};
   String: Scalars["String"]["output"];
+  User: UserModel;
 };
 
 export type PageInfoResolvers<
@@ -248,6 +262,21 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryProductsConnectionArgs, "first">
   >;
+  user?: Resolver<
+    Maybe<ResolversTypes["User"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryUserArgs, "id">
+  >;
+};
+
+export type UserResolvers<
+  ContextType = AppContext,
+  ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"]
+> = {
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = AppContext> = {
@@ -255,4 +284,5 @@ export type Resolvers<ContextType = AppContext> = {
   Product?: ProductResolvers<ContextType>;
   ProductsConnection?: ProductsConnectionResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
 };

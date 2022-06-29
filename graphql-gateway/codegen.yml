@@ -22,6 +22,7 @@ generates:
         enumValues: upper-case#upperCase
       mappers:
         Product: ./services/product/models#Product
+        User: ./services/user/models#User
         ProductsConnection: ./services/product/models#ProductsConnection
       scalars:
         ID: string
