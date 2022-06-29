@@ -56,7 +56,7 @@ You can check the report in `graphql-gateway/coverage/index.html`.
 
 ## 5: Write a user query
 
-Implement a new query that gets a user by ID. The user's ID and name should be in the schema.
+Implement a new query that gets a user by ID.
 
 <details> 
   <summary>Expand to show hints</summary>
@@ -65,22 +65,19 @@ Implement a new query that gets a user by ID. The user's ID and name should be i
 - Add a `user` service under `graphql-gateway/src/services`.
 - Check `services/user.yml` for the user service schema.
 - Add a user dataloader.
-- Update the codegen config to use the user model returned by the API.
 </details>
 
-## 6: Add `Product.seller` and `User.products` resolver
+## 6: Add seller resolver
 
-Add a seller resolver which returns the same user type as the user query. In addition to that, add a products resolver for the user type.
+Add a seller resolver which returns the same user type as the user query.
 
 <details> 
   <summary>Expand to show hints</summary>
 
 - Update the `Product` type definition and add the `seller` to it.
-- Update the `User` type definition and add the `products` to it.
-- Add the resolver to `graphql-gateway/services/product/resolvers.ts` and `graphql-gateway/services/user/resolvers.ts`.
-- Reuse the dataloaders from step 4 and 5.
+- Add the resolver to `graphql-gateway/services/product/resolvers.ts`.
+- Reuse the data loader from step 4.
 - Use `seller_id` from the product model.
-- Use `product_ids` from the user model.
 </details>
 
 ## 7. Add unit tests for all the new code

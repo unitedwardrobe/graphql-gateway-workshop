@@ -35,7 +35,7 @@ components:
       properties:
         id:
           type: integer
-        name:
+        title:
           type: string
         product_ids:
           type: array
