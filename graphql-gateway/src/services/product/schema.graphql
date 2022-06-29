@@ -3,10 +3,36 @@ type Query {
   productsConnection(first: Int!, after: String): ProductsConnection!
 }
 
+type Mutation {
+  favoriteProduct(input: FavoriteProductInput!): FavoriteProductPayload!
+  unfavoriteProduct(input: UnfavoriteProductInput!): UnfavoriteProductPayload!
+}
+
+input FavoriteProductInput {
+  clientMutationId: String
+  productId: ID!
+}
+
+type FavoriteProductPayload {
+  clientMutationId: String
+  product: Product!
+}
+
+input UnfavoriteProductInput {
+  clientMutationId: String
+  productId: ID!
+}
+
+type UnfavoriteProductPayload {
+  clientMutationId: String
+  product: Product!
+}
+
 type Product {
   id: ID!
   title: String!
   seller: User!
+  favorites: Int!
 }
 
 type ProductsConnection {

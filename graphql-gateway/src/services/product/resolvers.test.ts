@@ -52,8 +52,43 @@ describe("Query", () => {
     expect(getLimitOffset).toBeCalledWith(30, "foo");
   });
 });
+describe("Mutations", () => {
+  test("favoriteProduct", async () => {
+    (context.services.product.favoriteProduct as jest.Mock).mockResolvedValue(
+      "the product"
+    );
+    await expect(
+      resolvers.Mutation.favoriteProduct(
+        {},
+        { input: { productId: "123" } },
+        context,
+        info
+      )
+    ).resolves.toEqual({ product: "the product" });
+    expect(context.services.product.favoriteProduct).toBeCalledWith(123);
+  });
+  test("unfavoriteProduct", async () => {
+    (context.services.product.unfavoriteProduct as jest.Mock).mockResolvedValue(
+      "the product"
+    );
+    await expect(
+      resolvers.Mutation.unfavoriteProduct(
+        {},
+        { input: { productId: "123" } },
+        context,
+        info
+      )
+    ).resolves.toEqual({ product: "the product" });
+    expect(context.services.product.unfavoriteProduct).toBeCalledWith(123);
+  });
+});
 describe("Product", () => {
-  const product = { id: 123, title: "the title", seller_id: 456 } as Product;
+  const product = {
+    id: 123,
+    title: "the title",
+    seller_id: 456,
+    favorites: 5,
+  } as Product;
   test("id", () => {
     expect(resolvers.Product.id(product, {}, context, info)).toEqual("123");
   });
@@ -67,5 +102,8 @@ describe("Product", () => {
     await expect(
       resolvers.Product.seller(product, {}, context, info)
     ).resolves.toEqual("the user");
+  });
+  test("favorites", () => {
+    expect(resolvers.Product.favorites(product, {}, context, info)).toEqual(5);
   });
 });

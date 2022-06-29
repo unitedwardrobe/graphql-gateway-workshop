@@ -4,6 +4,7 @@ export interface Product {
   id: number;
   title: string;
   seller_id: number;
+  favorites: number;
 }
 
 export interface GetProductsResponse {

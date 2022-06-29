@@ -29,4 +29,18 @@ export class ProductService {
     });
     return res.data;
   }
+
+  public async favoriteProduct(product_id: number): Promise<Product> {
+    const res = await this.client.post<Product>("/favorite", {
+      product_id,
+    });
+    return res.data;
+  }
+
+  public async unfavoriteProduct(product_id: number): Promise<Product> {
+    const res = await this.client.post<Product>("/unfavorite", {
+      product_id,
+    });
+    return res.data;
+  }
 }

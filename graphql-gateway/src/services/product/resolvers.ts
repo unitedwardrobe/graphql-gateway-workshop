@@ -20,11 +20,42 @@ const resolvers: Resolvers = {
       };
     },
   },
+  Mutation: {
+    favoriteProduct: async (
+      _,
+      { input: { productId, clientMutationId } },
+      context
+    ) => {
+      const product = await context.services.product.favoriteProduct(
+        parseInt(productId, 10)
+      );
+      context.dataloaders.products.clear(product.id);
+      return {
+        clientMutationId,
+        product,
+      };
+    },
+    unfavoriteProduct: async (
+      _,
+      { input: { productId, clientMutationId } },
+      context
+    ) => {
+      const product = await context.services.product.unfavoriteProduct(
+        parseInt(productId, 10)
+      );
+      context.dataloaders.products.clear(product.id);
+      return {
+        clientMutationId,
+        product,
+      };
+    },
+  },
   Product: {
     id: (parent) => String(parent.id),
     title: (parent) => parent.title,
     seller: (parent, {}, context) =>
       context.dataloaders.users.load(parent.seller_id),
+    favorites: (parent) => parent.favorites,
   },
   ProductsConnection: limitOffsetConnectionResolvers(),
 };
