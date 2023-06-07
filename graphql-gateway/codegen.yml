@@ -23,3 +23,5 @@ generates:
       mappers:
         Product: ./services/product/models#Product
         ProductsConnection: ./services/product/models#ProductsConnection
+      scalars:
+        ID: string

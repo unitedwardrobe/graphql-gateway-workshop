@@ -16,35 +16,44 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T
+> = { [_ in K]?: never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
+    };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
   [P in K]-?: NonNullable<T[P]>;
 };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
 };
 
 export type PageInfo = {
   __typename?: "PageInfo";
-  endCursor?: Maybe<Scalars["String"]>;
-  hasNextPage: Scalars["Boolean"];
+  endCursor?: Maybe<Scalars["String"]["output"]>;
+  hasNextPage: Scalars["Boolean"]["output"];
 };
 
 export type Product = {
   __typename?: "Product";
-  id: Scalars["ID"];
-  title: Scalars["String"];
+  id: Scalars["ID"]["output"];
+  title: Scalars["String"]["output"];
 };
 
 export type ProductsConnection = {
   __typename?: "ProductsConnection";
   nodes: Array<Product>;
   pageInfo: PageInfo;
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 export type Query = {
@@ -54,12 +63,12 @@ export type Query = {
 };
 
 export type QueryProductArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryProductsConnectionArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  first: Scalars["Int"];
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  first: Scalars["Int"]["input"];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -169,26 +178,26 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
-  ID: ResolverTypeWrapper<Scalars["ID"]>;
-  Int: ResolverTypeWrapper<Scalars["Int"]>;
+  Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
+  ID: ResolverTypeWrapper<Scalars["ID"]["output"]>;
+  Int: ResolverTypeWrapper<Scalars["Int"]["output"]>;
   PageInfo: ResolverTypeWrapper<PageInfo>;
   Product: ResolverTypeWrapper<ProductModel>;
   ProductsConnection: ResolverTypeWrapper<ProductsConnectionModel>;
   Query: ResolverTypeWrapper<{}>;
-  String: ResolverTypeWrapper<Scalars["String"]>;
+  String: ResolverTypeWrapper<Scalars["String"]["output"]>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Boolean: Scalars["Boolean"];
-  ID: Scalars["ID"];
-  Int: Scalars["Int"];
+  Boolean: Scalars["Boolean"]["output"];
+  ID: Scalars["ID"]["output"];
+  Int: Scalars["Int"]["output"];
   PageInfo: PageInfo;
   Product: ProductModel;
   ProductsConnection: ProductsConnectionModel;
   Query: {};
-  String: Scalars["String"];
+  String: Scalars["String"]["output"];
 };
 
 export type PageInfoResolvers<
