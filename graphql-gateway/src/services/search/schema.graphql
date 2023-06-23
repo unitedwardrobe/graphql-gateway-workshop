@@ -1,0 +1,11 @@
+type Query {
+  search(query: String!, first: Int!, after: String): SearchResultsConnection!
+}
+
+type SearchResultsConnection {
+  nodes: [SearchResult!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+union SearchResult = Product | User

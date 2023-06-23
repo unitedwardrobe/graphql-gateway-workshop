@@ -4,6 +4,11 @@ import {
   Product as ProductModel,
   ProductsConnection as ProductsConnectionModel,
 } from "./services/product/models";
+import { User as UserModel } from "./services/user/models";
+import {
+  SearchConnection as SearchConnectionModel,
+  SearchResultParent as SearchResultParentModel,
+} from "./services/search/models";
 import { AppContext } from "./types";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -25,6 +30,7 @@ export type Incremental<T> =
   | {
       [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
     };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
   [P in K]-?: NonNullable<T[P]>;
 };
@@ -37,6 +43,31 @@ export type Scalars = {
   Float: { input: number; output: number };
 };
 
+export type FavoriteProductInput = {
+  clientMutationId?: InputMaybe<Scalars["String"]["input"]>;
+  productId: Scalars["ID"]["input"];
+};
+
+export type FavoriteProductPayload = {
+  __typename?: "FavoriteProductPayload";
+  clientMutationId?: Maybe<Scalars["String"]["output"]>;
+  product: Product;
+};
+
+export type Mutation = {
+  __typename?: "Mutation";
+  favoriteProduct: FavoriteProductPayload;
+  unfavoriteProduct: UnfavoriteProductPayload;
+};
+
+export type MutationFavoriteProductArgs = {
+  input: FavoriteProductInput;
+};
+
+export type MutationUnfavoriteProductArgs = {
+  input: UnfavoriteProductInput;
+};
+
 export type PageInfo = {
   __typename?: "PageInfo";
   endCursor?: Maybe<Scalars["String"]["output"]>;
@@ -45,7 +76,9 @@ export type PageInfo = {
 
 export type Product = {
   __typename?: "Product";
+  favorites: Scalars["Int"]["output"];
   id: Scalars["ID"]["output"];
+  seller: User;
   title: Scalars["String"]["output"];
 };
 
@@ -60,6 +93,8 @@ export type Query = {
   __typename?: "Query";
   product?: Maybe<Product>;
   productsConnection: ProductsConnection;
+  search: SearchResultsConnection;
+  user?: Maybe<User>;
 };
 
 export type QueryProductArgs = {
@@ -69,6 +104,43 @@ export type QueryProductArgs = {
 export type QueryProductsConnectionArgs = {
   after?: InputMaybe<Scalars["String"]["input"]>;
   first: Scalars["Int"]["input"];
+};
+
+export type QuerySearchArgs = {
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  first: Scalars["Int"]["input"];
+  query: Scalars["String"]["input"];
+};
+
+export type QueryUserArgs = {
+  id: Scalars["ID"]["input"];
+};
+
+export type SearchResult = Product | User;
+
+export type SearchResultsConnection = {
+  __typename?: "SearchResultsConnection";
+  nodes: Array<SearchResult>;
+  pageInfo: PageInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
+export type UnfavoriteProductInput = {
+  clientMutationId?: InputMaybe<Scalars["String"]["input"]>;
+  productId: Scalars["ID"]["input"];
+};
+
+export type UnfavoriteProductPayload = {
+  __typename?: "UnfavoriteProductPayload";
+  clientMutationId?: Maybe<Scalars["String"]["output"]>;
+  product: Product;
+};
+
+export type User = {
+  __typename?: "User";
+  id: Scalars["ID"]["output"];
+  name: Scalars["String"]["output"];
+  products: Array<Product>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -179,25 +251,84 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
+  FavoriteProductInput: FavoriteProductInput;
+  FavoriteProductPayload: ResolverTypeWrapper<
+    Omit<FavoriteProductPayload, "product"> & {
+      product: ResolversTypes["Product"];
+    }
+  >;
   ID: ResolverTypeWrapper<Scalars["ID"]["output"]>;
   Int: ResolverTypeWrapper<Scalars["Int"]["output"]>;
+  Mutation: ResolverTypeWrapper<{}>;
   PageInfo: ResolverTypeWrapper<PageInfo>;
   Product: ResolverTypeWrapper<ProductModel>;
   ProductsConnection: ResolverTypeWrapper<ProductsConnectionModel>;
   Query: ResolverTypeWrapper<{}>;
+  SearchResult: ResolverTypeWrapper<SearchResultParentModel>;
+  SearchResultsConnection: ResolverTypeWrapper<SearchConnectionModel>;
   String: ResolverTypeWrapper<Scalars["String"]["output"]>;
+  UnfavoriteProductInput: UnfavoriteProductInput;
+  UnfavoriteProductPayload: ResolverTypeWrapper<
+    Omit<UnfavoriteProductPayload, "product"> & {
+      product: ResolversTypes["Product"];
+    }
+  >;
+  User: ResolverTypeWrapper<UserModel>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars["Boolean"]["output"];
+  FavoriteProductInput: FavoriteProductInput;
+  FavoriteProductPayload: Omit<FavoriteProductPayload, "product"> & {
+    product: ResolversParentTypes["Product"];
+  };
   ID: Scalars["ID"]["output"];
   Int: Scalars["Int"]["output"];
+  Mutation: {};
   PageInfo: PageInfo;
   Product: ProductModel;
   ProductsConnection: ProductsConnectionModel;
   Query: {};
+  SearchResult: SearchResultParentModel;
+  SearchResultsConnection: SearchConnectionModel;
   String: Scalars["String"]["output"];
+  UnfavoriteProductInput: UnfavoriteProductInput;
+  UnfavoriteProductPayload: Omit<UnfavoriteProductPayload, "product"> & {
+    product: ResolversParentTypes["Product"];
+  };
+  User: UserModel;
+};
+
+export type FavoriteProductPayloadResolvers<
+  ContextType = AppContext,
+  ParentType extends ResolversParentTypes["FavoriteProductPayload"] = ResolversParentTypes["FavoriteProductPayload"]
+> = {
+  clientMutationId?: Resolver<
+    Maybe<ResolversTypes["String"]>,
+    ParentType,
+    ContextType
+  >;
+  product?: Resolver<ResolversTypes["Product"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<
+  ContextType = AppContext,
+  ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]
+> = {
+  favoriteProduct?: Resolver<
+    ResolversTypes["FavoriteProductPayload"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationFavoriteProductArgs, "input">
+  >;
+  unfavoriteProduct?: Resolver<
+    ResolversTypes["UnfavoriteProductPayload"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUnfavoriteProductArgs, "input">
+  >;
 };
 
 export type PageInfoResolvers<
@@ -217,7 +348,9 @@ export type ProductResolvers<
   ContextType = AppContext,
   ParentType extends ResolversParentTypes["Product"] = ResolversParentTypes["Product"]
 > = {
+  favorites?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  seller?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -248,11 +381,77 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryProductsConnectionArgs, "first">
   >;
+  search?: Resolver<
+    ResolversTypes["SearchResultsConnection"],
+    ParentType,
+    ContextType,
+    RequireFields<QuerySearchArgs, "first" | "query">
+  >;
+  user?: Resolver<
+    Maybe<ResolversTypes["User"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryUserArgs, "id">
+  >;
+};
+
+export type SearchResultResolvers<
+  ContextType = AppContext,
+  ParentType extends ResolversParentTypes["SearchResult"] = ResolversParentTypes["SearchResult"]
+> = {
+  __resolveType: TypeResolveFn<"Product" | "User", ParentType, ContextType>;
+};
+
+export type SearchResultsConnectionResolvers<
+  ContextType = AppContext,
+  ParentType extends ResolversParentTypes["SearchResultsConnection"] = ResolversParentTypes["SearchResultsConnection"]
+> = {
+  nodes?: Resolver<
+    Array<ResolversTypes["SearchResult"]>,
+    ParentType,
+    ContextType
+  >;
+  pageInfo?: Resolver<ResolversTypes["PageInfo"], ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UnfavoriteProductPayloadResolvers<
+  ContextType = AppContext,
+  ParentType extends ResolversParentTypes["UnfavoriteProductPayload"] = ResolversParentTypes["UnfavoriteProductPayload"]
+> = {
+  clientMutationId?: Resolver<
+    Maybe<ResolversTypes["String"]>,
+    ParentType,
+    ContextType
+  >;
+  product?: Resolver<ResolversTypes["Product"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserResolvers<
+  ContextType = AppContext,
+  ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"]
+> = {
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  products?: Resolver<
+    Array<ResolversTypes["Product"]>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = AppContext> = {
+  FavoriteProductPayload?: FavoriteProductPayloadResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   PageInfo?: PageInfoResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   ProductsConnection?: ProductsConnectionResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  SearchResult?: SearchResultResolvers<ContextType>;
+  SearchResultsConnection?: SearchResultsConnectionResolvers<ContextType>;
+  UnfavoriteProductPayload?: UnfavoriteProductPayloadResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
 };

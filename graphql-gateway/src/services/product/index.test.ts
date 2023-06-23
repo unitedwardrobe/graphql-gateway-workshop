@@ -19,4 +19,12 @@ describe("ProductService", () => {
       .reply(200, "response");
     await expect(service.getProducts(1, 2)).resolves.toEqual("response");
   });
+  test("favoriteProduct", async () => {
+    mock.onPost("/favorite", { product_id: 123 }).reply(200, "response");
+    await expect(service.favoriteProduct(123)).resolves.toEqual("response");
+  });
+  test("unfavoriteProduct", async () => {
+    mock.onPost("/unfavorite", { product_id: 123 }).reply(200, "response");
+    await expect(service.unfavoriteProduct(123)).resolves.toEqual("response");
+  });
 });
